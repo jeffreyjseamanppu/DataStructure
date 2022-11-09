@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 10 Class</title>
+<style>* { font-family: monospace; }</style>
+<script>
+//-------------------//
+// Graph terminology //
+//-------------------//
+console.log("Graph terminology");
+
+// Skip.
+
+
+
+//----------------------//
+// Representing a graph //
+//----------------------//
+console.log("Representing a graph");
+
+// Skip.
+
+
+
+//--------------------------//
+// Creating the Graph class //
+//--------------------------//
+console.log("Creating the Graph class");
+
+// 1. Implement the Graph class.
+function Dictionary() {
+  //store items in an object
+  this.items = {};
+}
+
+//Update the prototype value
+Dictionary.prototype.set = function(key,value){
+  this.items[key] = value;
+};
+
+//Remove the item
+Dictionary.prototype.delete = function(key,value){
+  //conditional statement
+  if(this.has(key)){
+    delete this.items[key];
+    return true;
+  }
+    return false;
+};
+
+//has 
+Dictionary.prototype.has = function(key){
+  return key in this.items;
+};
+
+Dictionary.prototype.get = function(key){
+  return this.has(key) ? this.items[key] : undefined;
+};
+
+//Clear
+Dictionary.prototype.clear = function(){
+  this.items = {};
+};
+
+//Size
+Dictionary.prototype.size = function(){
+  return Object.keys(this.items).length;
+};
+
+//keys
+Dictionary.prototype.keys = function(){
+  return Object.keys(this.items);
+};
+
+//values
+Dictionary.prototype.values = function(){
+  var values = [];
+  for(var k in this.items){
+    if(this.has(k)){
+      values.push(this.itmes[k]);
+    }
+  }
+  return values;
+};
+
+Dictionary.prototype.getItems = function() {
+  return this.items;
+}
+
+Dictionary.prototype.print = function() {
+  console.log(this.items);
+};
+
+function Queue() {
+  //initialize the queue
+  this.items = [];
+};
+
+Queue.prototype.enqueue = function(elt){
+  this.items.push(elt);
+};
+
+Queue.prototype.dequeue = function(elt){
+  this.items.shift();
+};
+
+Queue.prototype.front = function() {
+  return this.items[0];
+};
+
+Queue.prototype.isEmpty = function() {
+  return this.items.length === 0;
+};
+
+Queue.prototype.size = function() {
+  return this.items.length;
+};
+
+Queue.prototype.print = function() {
+  console.log(this.items.toString());
+};
+
+function Graph() {
+  var verticle = [];
+  var adjList = new Dictionary();
+
+  this.addVertex = function(v) {
+    verticle.push(v);
+    adjList.set(v, []);
+  };
+  this.addEdge = function(v,w) {
+    adjList.get(v).push(w);
+    adjList.get(w).push(v); //Review this??
+  };
+
+  this.toString = function(){
+    var s = "";
+    for(var i = 0; i < verticle.length; i++){
+      s += verticle[i] + " -> ";
+      var neighbors = adjList.get(verticle[i]);
+      for(var j = 0; j < neighbors.length; j++){
+        s += neighbors[j] + " ";
+      }
+        s += "\n";
+    }
+     return s;
+  };
+
+  var initializeColor = function(){
+    var color = {};
+    for(var i = 0; i < verticle.length; i++){
+      color[verticle[i]] = "white";
+    }
+    return color;
+  };
+
+  this.bfs = function(v, callback){
+    var color = initializeColor();
+    var queue = new Queue();
+    queue.enqueue(v);
+    while (!queue.isEmpty()){
+      var u = queue.dequeue();
+      var neighbors = adjList.get(u);
+      color[u] = "grey";
+      for(var i = 0; i < neighbors.length; i++){
+        var w = neighbors[i];
+        if(color[w] === "white"){
+          color[w] = "grey";
+          queue.enqueue(w);
+        }
+      }
+      color[u] = "black";
+      if(callback){
+        callback(u);
+      }
+    }
+  };
+
+  var dfsVisit = function(u,color,callback) {
+   color[u] = "grey";
+   if(callback){
+     callback(u)
+   }
+
+   var neighbors = adjList.get(u);
+   for(var i = 0; i <neighbors.length; i++){
+     var w = neighbors[i];
+     if (color[w] === "white") {
+       dfsVisit(w,color,callback);
+     }
+   }
+    color[u] = "black";
+   };
+
+   this.dfs = function(callback) {
+     var color = initializeColor();
+     for (var i = 0; i < verticle.length; i++){
+       if(color[verticle[i]] === "white") {
+         dfsVisit(verticle[i],color,callback);
+       }
+     }
+   };
+  
+ }
+
+
+// 2. Test the Graph class with the example from the book.
+
+
+
+//------------------//
+// Graph traversals //
+//------------------//
+console.log("Graph traversals");
+
+// 1. Implement breadth-first search.
+
+// 2. Implement depth-first search.
+
+
+
+//--------------------------//
+// Shortest path algorithms //
+//--------------------------//
+console.log("Shortest path algorithms");
+
+// 1. Implement Dijkstra's algorithm.
+
+// 2. Test your implementation of Dijkstra's algorithm.
+
+
+
+//-----------------------------//
+// Minimum spanning tree (MST) //
+//-----------------------------//
+console.log("Minimum spanning tree (MST)");
+
+// Skip for now (see homework).
+
+
+
+//---------//
+// Project //
+//---------//
+console.log("Project");
+
+// 1. Write a function that takes two graphs as input and returns true if
+//    they have the same nodes and edges, and false otherwise. Test your code.
+
+function isEqual(graph1, graph2) {
+  // ...
+}
+
+
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>
